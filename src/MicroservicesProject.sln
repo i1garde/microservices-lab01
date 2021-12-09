@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "App", "Frontent.Web\src\App.fsproj", "{C189629B-52A2-4226-A532-83897B72DCA4}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Giraffe.API", "Giraffe.API\Giraffe.API.fsproj", "{CA30BFE4-043B-438A-B3B7-21916CCE9935}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Giraffe.API", "Giraffe.API\Giraffe.API.fsproj", "{759FB422-75E2-4ED9-9784-D18EF7F3315E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,9 +20,9 @@ Global
 		{C189629B-52A2-4226-A532-83897B72DCA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C189629B-52A2-4226-A532-83897B72DCA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C189629B-52A2-4226-A532-83897B72DCA4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CA30BFE4-043B-438A-B3B7-21916CCE9935}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CA30BFE4-043B-438A-B3B7-21916CCE9935}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CA30BFE4-043B-438A-B3B7-21916CCE9935}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CA30BFE4-043B-438A-B3B7-21916CCE9935}.Release|Any CPU.Build.0 = Release|Any CPU
+		{759FB422-75E2-4ED9-9784-D18EF7F3315E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{759FB422-75E2-4ED9-9784-D18EF7F3315E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{759FB422-75E2-4ED9-9784-D18EF7F3315E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{759FB422-75E2-4ED9-9784-D18EF7F3315E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

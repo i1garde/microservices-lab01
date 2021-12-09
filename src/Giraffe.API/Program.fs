@@ -2,10 +2,12 @@ module Giraffe.API.App
 
 open System
 open System.IO
+open System.Security.Cryptography.X509Certificates
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Cors.Infrastructure
 open Microsoft.AspNetCore.Hosting
-open Microsoft.AspNetCore.Http
+open Microsoft.AspNetCore.Server.Kestrel.Core
+open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.Hosting
 open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
@@ -21,22 +23,48 @@ type Message =
     }
 
 // ---------------------------------
+// Views
+// ---------------------------------
+
+module Views =
+    open Giraffe.ViewEngine
+
+    let layout (content: XmlNode list) =
+        html [] [
+            head [] [
+                title []  [ encodedText "Giraffe.API" ]
+                link [ _rel  "stylesheet"
+                       _type "text/css"
+                       _href "/main.css" ]
+            ]
+            body [] content
+        ]
+
+    let partial () =
+        h1 [] [ encodedText "Giraffe.API" ]
+
+    let index (model : Message) =
+        [
+            partial()
+            p [] [ encodedText model.Text ]
+        ] |> layout
+
+// ---------------------------------
 // Web app
 // ---------------------------------
 
 let indexHandler (name : string) =
-    fun (next : HttpFunc) (ctx : HttpContext) ->
-    task {
-        let msg = sprintf "Hello, %s" name
-        return! json { Text = msg } next ctx
-    }
+    let greetings = sprintf "Hello %s, from Giraffe!" name
+    let model     = { Text = greetings }
+    let view      = Views.index model
+    htmlView view
 
 let webApp =
     choose [
         GET >=>
             choose [
-                route "/api/hello" >=> indexHandler "world"
-                routef "/api/hello/%s" indexHandler
+                route "/" >=> indexHandler "world"
+                routef "/hello/%s" indexHandler
             ]
         setStatusCode 404 >=> text "Not Found" ]
 
@@ -81,20 +109,24 @@ let configureLogging (builder : ILoggingBuilder) =
     builder.AddConsole()
            .AddDebug() |> ignore
 
+let configureAppConfiguration (config: IConfigurationBuilder) =
+    config.AddJsonFile("/https/certificate.json") |> ignore
+
+let configureKestrel (context: WebHostBuilderContext) (options: KestrelServerOptions) =
+    let certificatePath = context.Configuration.GetSection("certificate").GetValue<string>("Path")
+    let certificatePassword = context.Configuration.GetSection("certificate").GetValue<string>("Password")
+    let certificate = new X509Certificate2(certificatePath, certificatePassword)
+    options.ListenAnyIP(5000)
+    options.ListenAnyIP(5001, fun options -> options.UseHttps certificate |> ignore)
+
 [<EntryPoint>]
 let main args =
-    let contentRoot = Directory.GetCurrentDirectory()
-    let webRoot     = Path.Combine(contentRoot, "WebRoot")
-    Host.CreateDefaultBuilder(args)
-        .ConfigureWebHostDefaults(
-            fun webHostBuilder ->
-                webHostBuilder
-                    .UseContentRoot(contentRoot)
-                    .UseWebRoot(webRoot)
-                    .Configure(Action<IApplicationBuilder> configureApp)
-                    .ConfigureServices(configureServices)
-                    .ConfigureLogging(configureLogging)
-                    |> ignore)
+    WebHostBuilder()
+        .ConfigureAppConfiguration(configureAppConfiguration)
+        .UseKestrel(Action<WebHostBuilderContext,KestrelServerOptions> configureKestrel)
+        .Configure(Action<IApplicationBuilder> configureApp)
+        .ConfigureServices(configureServices)
+        .ConfigureLogging(configureLogging)
         .Build()
         .Run()
     0
