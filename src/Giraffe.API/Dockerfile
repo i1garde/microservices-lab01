@@ -5,7 +5,7 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["Giraffe.API/Giraffe.API.fsproj", "Giraffe.API/"]
+COPY . Giraffe.API/
 RUN dotnet restore "Giraffe.API/Giraffe.API.fsproj"
 COPY . .
 WORKDIR "/src/Giraffe.API"

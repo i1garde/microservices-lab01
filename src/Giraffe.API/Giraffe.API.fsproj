@@ -28,8 +28,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="ssl\docker.loc.crt" />
-      <Content Include="ssl\docker.loc.key" />
       <None Include="https\certificate.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
