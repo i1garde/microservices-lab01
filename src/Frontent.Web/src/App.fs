@@ -1,6 +1,8 @@
 module App
 
 open Browser.Dom
+open Elmish
+open Fable.React
 
 // Mutable variable to count the number of times we clicked the button
 let mutable count = 0
