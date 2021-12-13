@@ -2,12 +2,9 @@ module Giraffe.API.App
 
 open System
 open System.IO
-open System.Security.Cryptography.X509Certificates
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Cors.Infrastructure
 open Microsoft.AspNetCore.Hosting
-open Microsoft.AspNetCore.Server.Kestrel.Core
-open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.Hosting
 open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
@@ -109,24 +106,20 @@ let configureLogging (builder : ILoggingBuilder) =
     builder.AddConsole()
            .AddDebug() |> ignore
 
-let configureAppConfiguration (config: IConfigurationBuilder) =
-    config.AddJsonFile("/https/certificate.json") |> ignore
-
-let configureKestrel (context: WebHostBuilderContext) (options: KestrelServerOptions) =
-    let certificatePath = context.Configuration.GetSection("certificate").GetValue<string>("Path")
-    let certificatePassword = context.Configuration.GetSection("certificate").GetValue<string>("Password")
-    let certificate = new X509Certificate2(certificatePath, certificatePassword)
-    options.ListenAnyIP(5000)
-    options.ListenAnyIP(5001, fun options -> options.UseHttps certificate |> ignore)
-
 [<EntryPoint>]
 let main args =
-    WebHostBuilder()
-        .ConfigureAppConfiguration(configureAppConfiguration)
-        .UseKestrel(Action<WebHostBuilderContext,KestrelServerOptions> configureKestrel)
-        .Configure(Action<IApplicationBuilder> configureApp)
-        .ConfigureServices(configureServices)
-        .ConfigureLogging(configureLogging)
+    let contentRoot = Directory.GetCurrentDirectory()
+    let webRoot     = Path.Combine(contentRoot, "WebRoot")
+    Host.CreateDefaultBuilder(args)
+        .ConfigureWebHostDefaults(
+            fun webHostBuilder ->
+                webHostBuilder
+                    .UseContentRoot(contentRoot)
+                    .UseWebRoot(webRoot)
+                    .Configure(Action<IApplicationBuilder> configureApp)
+                    .ConfigureServices(configureServices)
+                    .ConfigureLogging(configureLogging)
+                    |> ignore)
         .Build()
         .Run()
     0

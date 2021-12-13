@@ -1,6 +1,0 @@
-{
-  "Certificate": {
-    "Path": "/https/Giraffe.API.pfx",
-    "Password": "ReallyStrongPassword"
-  }
-}

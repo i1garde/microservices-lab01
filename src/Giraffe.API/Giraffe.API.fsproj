@@ -5,8 +5,6 @@
         <AssemblyName>Giraffe.API.App</AssemblyName>
         <EnableDefaultContentItems>false</EnableDefaultContentItems>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-        <IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
-        <UserSecretsId>650ff26a-4225-44f5-a6c2-2e232bcf84d7</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
@@ -25,11 +23,5 @@
         <Content Include="WebRoot\**\*">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Include="https\certificate.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
     </ItemGroup>
 </Project>
