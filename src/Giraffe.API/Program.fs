@@ -32,13 +32,15 @@ let indexHandler (name : string) : HttpHandler =
         }
 
 let webApp =
-    choose [
-        GET >=>
-            choose [
-                route "/" >=> indexHandler "world"
-                routef "/hello/%s" indexHandler
-            ]
-        setStatusCode 404 >=> text "Not Found" ]
+    subRoute "/api" (
+        choose [
+            GET >=>
+                choose [
+                    route "/" >=> indexHandler "world"
+                    routef "/hello/%s" indexHandler
+                ]
+            setStatusCode 404 >=> text "Not Found" ]
+        )
 
 // ---------------------------------
 // Error handler
