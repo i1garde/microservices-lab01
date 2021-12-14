@@ -1,15 +1,25 @@
 # microservices-lab01
 
-HOW TO START GIRAFFE.API DOCKER CONTAINER:
+Start kuber cluster:
+
+minikube start
+
+HOW TO BUILD DOCKER CONTAINERS:
+
+eval $(minikube docker-env)
 
 sudo docker build -t giraffe-app .
 
-sudo docker run -p 5000:5000 -p 5001:5001 -v "Path to certificate.json with ssl trust cert":/https/ giraffe-app
-
-HOW TO START FABLE.APP DOCKER CONTAINER:
-
 sudo docker build -t fable-app .
 
-sudo docker run -it -p 8080:8080 fable-app
+ADD .YAML CONFIGURATIONS:
 
-TO ACCESS FABLE.APP GO TO THE http://0.0.0.0:8080
+kubectl apply -f kubectl/fable
+
+kubectl apply -f kubectl/giraffe
+
+kubectl apply -f kubectl/ingress.yaml
+
+TO DISCOVER ENTRYPOINT ENTER: echo $(minikube ip)
+
+Fable app is available in the root directory and Giraffe-API at /api
