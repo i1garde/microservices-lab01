@@ -8,9 +8,9 @@ HOW TO BUILD DOCKER CONTAINERS:
 
 eval $(minikube docker-env)
 
-sudo docker build -t giraffe-app .
+sudo docker build -t giraffe:0.1 .
 
-sudo docker build -t fable-app .
+sudo docker build -t fable:0.1 .
 
 ADD .YAML CONFIGURATIONS:
 
